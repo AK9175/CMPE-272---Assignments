@@ -1,0 +1,17 @@
+ssh -i i-0ce97295aa380ea0d_key.pem ubuntu@3.101.118.103 -> SSH
+
+ssh -i i-09d0e392985bf6935_key.pem ubuntu@54.193.52.129 -> SSH
+
+ansible -i hosts.ini webservers -m ping 
+Ping Command Ansible connects via SSH to each host in the webservers group (from hosts.ini).
+
+ansible-playbook -i hosts.ini webserver.yml
+Deploy the webservers mentioned in ansible playbook
+
+ansible-playbook -i hosts.ini undeploy.yml
+Undeploy the webservers mentioned in ansible playbook
+
+
+3.101.118.103:8080
+
+54.193.52.129:8080

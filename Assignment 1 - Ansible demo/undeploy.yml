@@ -1,0 +1,44 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - name: Stop Apache if running
+      service:
+        name: "{{ 'apache2' if ansible_os_family == 'Debian' else 'httpd' }}"
+        state: stopped
+      ignore_errors: true
+
+    # Debian/Ubuntu
+    - name: Purge apache2 (Debian)
+      apt:
+        name: apache2
+        state: absent
+        purge: yes
+        autoremove: yes
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Remove apache2 dirs (Debian)
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apache2
+        - /var/www/html
+      when: ansible_os_family == "Debian"
+
+    # RedHat-family (if you ever use it)
+    - name: Remove httpd (RedHat)
+      yum:
+        name: httpd
+        state: absent
+      when: ansible_os_family == "RedHat"
+
+    - name: Remove httpd dirs (RedHat)
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/httpd
+        - /var/www/html
+      when: ansible_os_family == "RedHat"
